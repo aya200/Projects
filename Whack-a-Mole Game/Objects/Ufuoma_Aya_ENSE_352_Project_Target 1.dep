@@ -1,0 +1,2 @@
+Dependencies for Project 'Ufuoma_Aya_ENSE_352_Project', Target 'Target 1': (DO NOT MODIFY !)
+F (.\Ufuoma_Aya_ENSE_352_Project.s)(0x5DEDAF51)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_Target_1-IC:\Users\louis\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include--pd "__UVISION_VERSION SETA 528" --pd "STM32F10X_MD_VL SETA 1"--list .\listings\ufuoma_aya_ense_352_project.lst --xref -o .\objects\ufuoma_aya_ense_352_project.o --depend .\objects\ufuoma_aya_ense_352_project.d)

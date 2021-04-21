@@ -1,0 +1,1487 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; Ufuoma Aya
+    2 00000000         ; 200327306
+    3 00000000         ; ENSE 352 Project
+    4 00000000         
+    5 00000000         
+    6 00000000         
+    7 00000000         ; GPIO Test program - Dave Duguid, 2011
+    8 00000000         ; Modified Trevor Douglas 2014
+    9 00000000         
+   10 00000000         ;;; Directives
+   11 00000000                 PRESERVE8
+   12 00000000                 THUMB
+   13 00000000         
+   14 00000000         
+   15 00000000         ;;; Equates
+   16 00000000         
+   17 00000000 20001000 
+                       INITIAL_MSP
+                               EQU              0x20001000  ; Initial Main Stac
+                                                            k Pointer Value
+   18 00000000         
+   19 00000000         
+   20 00000000         ;PORT A GPIO - Base Addr: 0x40010800
+   21 00000000 40010800 
+                       GPIOA_CRL
+                               EQU              0x40010800  ; (0x00) Port Confi
+                                                            guration Register f
+                                                            or Px7 -> Px0
+   22 00000000 40010804 
+                       GPIOA_CRH
+                               EQU              0x40010804  ; (0x04) Port Confi
+                                                            guration Register f
+                                                            or Px15 -> Px8
+   23 00000000 40010808 
+                       GPIOA_IDR
+                               EQU              0x40010808  ; (0x08) Port Input
+                                                             Data Register
+   24 00000000 4001080C 
+                       GPIOA_ODR
+                               EQU              0x4001080C  ; (0x0C) Port Outpu
+                                                            t Data Register
+   25 00000000 40010810 
+                       GPIOA_BSRR
+                               EQU              0x40010810  ; (0x10) Port Bit S
+                                                            et/Reset Register
+   26 00000000 40010814 
+                       GPIOA_BRR
+                               EQU              0x40010814  ; (0x14) Port Bit R
+                                                            eset Register
+   27 00000000 40010818 
+                       GPIOA_LCKR
+                               EQU              0x40010818  ; (0x18) Port Confi
+                                                            guration Lock Regis
+                                                            ter
+   28 00000000         
+   29 00000000         ;PORT B GPIO - Base Addr: 0x40010C00
+   30 00000000 40010C00 
+                       GPIOB_CRL
+                               EQU              0x40010C00  ; (0x00) Port Confi
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                            guration Register f
+                                                            or Px7 -> Px0
+   31 00000000 40010C04 
+                       GPIOB_CRH
+                               EQU              0x40010C04  ; (0x04) Port Confi
+                                                            guration Register f
+                                                            or Px15 -> Px8
+   32 00000000 40010C08 
+                       GPIOB_IDR
+                               EQU              0x40010C08  ; (0x08) Port Input
+                                                             Data Register
+   33 00000000 40010C0C 
+                       GPIOB_ODR
+                               EQU              0x40010C0C  ; (0x0C) Port Outpu
+                                                            t Data Register
+   34 00000000 40010C10 
+                       GPIOB_BSRR
+                               EQU              0x40010C10  ; (0x10) Port Bit S
+                                                            et/Reset Register
+   35 00000000 40010C14 
+                       GPIOB_BRR
+                               EQU              0x40010C14  ; (0x14) Port Bit R
+                                                            eset Register
+   36 00000000 40010C18 
+                       GPIOB_LCKR
+                               EQU              0x40010C18  ; (0x18) Port Confi
+                                                            guration Lock Regis
+                                                            ter
+   37 00000000         
+   38 00000000         ;The onboard LEDS are on port C bits 8 and 9
+   39 00000000         ;PORT C GPIO - Base Addr: 0x40011000
+   40 00000000 40011000 
+                       GPIOC_CRL
+                               EQU              0x40011000  ; (0x00) Port Confi
+                                                            guration Register f
+                                                            or Px7 -> Px0
+   41 00000000 40011004 
+                       GPIOC_CRH
+                               EQU              0x40011004  ; (0x04) Port Confi
+                                                            guration Register f
+                                                            or Px15 -> Px8
+   42 00000000 40011008 
+                       GPIOC_IDR
+                               EQU              0x40011008  ; (0x08) Port Input
+                                                             Data Register
+   43 00000000 4001100C 
+                       GPIOC_ODR
+                               EQU              0x4001100C  ; (0x0C) Port Outpu
+                                                            t Data Register
+   44 00000000 40011010 
+                       GPIOC_BSRR
+                               EQU              0x40011010  ; (0x10) Port Bit S
+                                                            et/Reset Register
+   45 00000000 40011014 
+                       GPIOC_BRR
+                               EQU              0x40011014  ; (0x14) Port Bit R
+                                                            eset Register
+   46 00000000 40011018 
+                       GPIOC_LCKR
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+                               EQU              0x40011018  ; (0x18) Port Confi
+                                                            guration Lock Regis
+                                                            ter
+   47 00000000         
+   48 00000000         ;Registers for configuring and enabling the clocks
+   49 00000000         ;RCC Registers - Base Addr: 0x40021000
+   50 00000000 40021000 
+                       RCC_CR  EQU              0x40021000  ; Clock Control Reg
+                                                            ister
+   51 00000000 40021004 
+                       RCC_CFGR
+                               EQU              0x40021004  ; Clock Configurati
+                                                            on Register
+   52 00000000 40021008 
+                       RCC_CIR EQU              0x40021008  ; Clock Interrupt R
+                                                            egister
+   53 00000000 4002100C 
+                       RCC_APB2RSTR
+                               EQU              0x4002100C  ; APB2 Peripheral R
+                                                            eset Register
+   54 00000000 40021010 
+                       RCC_APB1RSTR
+                               EQU              0x40021010  ; APB1 Peripheral R
+                                                            eset Register
+   55 00000000 40021014 
+                       RCC_AHBENR
+                               EQU              0x40021014  ; AHB Peripheral Cl
+                                                            ock Enable Register
+                                                            
+   56 00000000         
+   57 00000000 40021018 
+                       RCC_APB2ENR
+                               EQU              0x40021018  ; APB2 Peripheral C
+                                                            lock Enable Registe
+                                                            r  -- Used
+   58 00000000         
+   59 00000000 4002101C 
+                       RCC_APB1ENR
+                               EQU              0x4002101C  ; APB1 Peripheral C
+                                                            lock Enable Registe
+                                                            r
+   60 00000000 40021020 
+                       RCC_BDCR
+                               EQU              0x40021020  ; Backup Domain Con
+                                                            trol Register
+   61 00000000 40021024 
+                       RCC_CSR EQU              0x40021024  ; Control/Status Re
+                                                            gister
+   62 00000000 4002102C 
+                       RCC_CFGR2
+                               EQU              0x4002102C  ; Clock Configurati
+                                                            on Register 2
+   63 00000000         
+   64 00000000 00000000 
+                       ADC_CR1 EQU              0x00000000
+   65 00000000 00000000 
+                       ADC_CR2 EQU              0x00000000
+   66 00000000         
+   67 00000000         ; Times for Delay routines
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+   68 00000000         
+   69 00000000 00186A00 
+                       DelayTIME
+                               EQU              1600000     ; (200 ms/24MHz PLL
+                                                            )
+   70 00000000         
+   71 00000000         
+   72 00000000         ; Vector Table Mapped to Address 0 at Reset
+   73 00000000                 AREA             RESET, Data, READONLY
+   74 00000000                 EXPORT           __Vectors
+   75 00000000         
+   76 00000000 20001000 
+                       __Vectors
+                               DCD              INITIAL_MSP ; stack pointer val
+                                                            ue when stack is em
+                                                            pty
+   77 00000004 00000000        DCD              Reset_Handler ; reset vector
+   78 00000008         
+   79 00000008                 AREA             MYCODE, CODE, READONLY
+   80 00000000                 EXPORT           Reset_Handler
+   81 00000000                 ENTRY
+   82 00000000         
+   83 00000000         Reset_Handler
+                               PROC
+   84 00000000 F7FF FFFE       BL               GPIO_ClockInit
+   85 00000004 F7FF FFFE       BL               GPIO_Init
+   86 00000008         
+   87 00000008         MainLoop
+   88 00000008 F7FF FFFE       BL               ready_mode
+   89 0000000C F7FF FFFE       BL               numCycles
+   90 00000010 E7FA            B                MainLoop
+   91 00000012                 ENDP
+   92 00000012         
+   93 00000012         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Subroutines;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+   94 00000012         
+   95 00000012 00 00           ALIGN
+   96 00000014         
+   97 00000014         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                       ;;
+   98 00000014         ;;; This routine enables the clock for the Port A, B & C
+                       ;
+   99 00000014         ;;; Reset value: 0x0000 0000
+  100 00000014         ;;; Registers:
+  101 00000014         ;;;  R4: Loads the address of RCC_APB2ENR
+  102 00000014         ;;;  R0: Moves required hex values to enable clock 
+  103 00000014         ;;;  R0: Stores required value in R0
+  104 00000014         GPIO_ClockInit
+                               PROC
+  105 00000014         
+  106 00000014 B410            PUSH             {R4}
+  107 00000016 4CBC            LDR              R4, =RCC_APB2ENR
+  108 00000018 F04F 001C       MOV              R0, #0x1C
+  109 0000001C 6020            STR              R0, [R4]
+  110 0000001E BC10            POP              {R4}
+  111 00000020 4770            BX               LR
+  112 00000022         
+  113 00000022                 ENDP
+  114 00000022         
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+  115 00000022 00 00           ALIGN
+  116 00000024         
+  117 00000024         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;;;;
+  118 00000024         ;;; This routine enables the GPIO for LEDs; 
+  119 00000024         ;;; Reset Value is 0x4444 4444 
+  120 00000024         ;;; CNF: General purpose push pull (00)
+  121 00000024         ;;; Mode: Max speed, 50 Mhz  (11)
+  122 00000024         ;;; LED1 - PA9, LED2 - PA10, LED3 - PA11, LED4 - PA12
+  123 00000024         ;;; Registers:
+  124 00000024         ;;;  R5: Loads address of GPIOA_CRH (CRH for GPIO pins 8
+                       -15)
+  125 00000024         ;;;  R6: Moves required hex values to enable GPIO
+  126 00000024         ;;;  R7: Loads hex value in address of R5 to R7
+  127 00000024         GPIO_Init
+                               PROC
+  128 00000024 B4E0            PUSH             {R5, R6, R7}
+  129 00000026 4DB9            LDR              R5, =GPIOA_CRH
+  130 00000028 682F            LDR              R7, [R5]
+  131 0000002A 4EB9            LDR              R6, =0x44433334
+  132 0000002C EA47 0706       ORR              R7,R6
+  133 00000030 602F            STR              R7,[R5]
+  134 00000032 BCE0            POP              {R5, R6, R7}
+  135 00000034 4770            BX               LR
+  136 00000036                 ENDP
+  137 00000036         
+  138 00000036 00 00           ALIGN
+  139 00000038         
+  140 00000038         
+  141 00000038         ready_mode
+                               PROC
+  142 00000038 F04F 0300       MOV              R3,#0x0
+  143 0000003C 4EB5            LDR              R6, =500000 ; for PrelimWait an
+                                                            d ReactTime
+  144 0000003E F8DF 82D4       LDR              R8, =500000 ; DelayTime
+  145 00000042         
+  146 00000042 F44F 52F0       MOV              R2,#0x1E00
+  147 00000046         
+  148 00000046         TurnOnLED
+  149 00000046 F8DF 92D0       LDR              R9,=GPIOA_ODR
+  150 0000004A F482 52F0       EOR              R2,R2,#0x1E00
+  151 0000004E F8C9 2000       STR              R2,[R9]
+  152 00000052 F04F 0A00       MOV              R10,#0x0
+  153 00000056 F04F 0B00       MOV              R11,#0x0
+  154 0000005A         
+  155 0000005A         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;;;;
+  156 0000005A         ;;; This routine enables the GPIO for Switches; 
+  157 0000005A         ;;; Reset Value is ox0000 xxxx 
+  158 0000005A         ;;; SW2 - PB8, SW3 - PB9, SW4 - PC12, SW5 - PA5
+  159 0000005A         ;;; Registers:
+  160 0000005A         ;;;  R7: Loads address of GPIOx_IDR
+  161 0000005A         ;;;  R4: Moves required hex values to enable GPIO
+  162 0000005A         DelayVal
+  163 0000005A 45B2            CMP              R10,R6
+  164 0000005C D0F3            BEQ              TurnOnLED
+  165 0000005E F10A 0A05       ADD              R10,#0x5
+  166 00000062         
+  167 00000062 B490            PUSH             {R7,R4}
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+  168 00000064 F04F 0500       LDR              R5,= 0x0
+  169 00000068 4FAC            LDR              R7, = GPIOC_IDR ; Loads address
+                                                             of Port C input da
+                                                            ta register     
+  170 0000006A 6838            LDR              R0,[R7]
+  171 0000006C         
+  172 0000006C F44F 5480       LDR              R4,= 0x1000 ; Loads required he
+                                                            x value for SW4 (Bl
+                                                            ue)
+  173 00000070 EA00 0004       AND              R0,R4
+  174 00000074 EA4F 3010       LSR              R0, #12     ; 0x1000 -> 0x1
+  175 00000078 F04F 0504       MOV              R5,#0x4
+  176 0000007C 2800            CMP              R0,#0x0     ; Check if R0 is 0
+  177 0000007E D021            BEQ              PortCWait_Init ; If yes, branch
+                                                             to PortCWait_Init
+  178 00000080         
+  179 00000080 F04F 0500       LDR              R5,= 0x0
+  180 00000084 4FA6            LDR              R7, = GPIOB_IDR ; Loads address
+                                                             of Port B input da
+                                                            ta register     
+  181 00000086 6838            LDR              R0,[R7]
+  182 00000088         
+  183 00000088 F44F 7440       LDR              R4,= 0x300  ; Loads required he
+                                                            x value for SW2 (Re
+                                                            d) and SW3 (Black) 
+                                                             
+  184 0000008C EA00 0004       AND              R0,R4
+  185 00000090 EA4F 2010       LSR              R0, #8      ; 0x300 -> 0x3
+  186 00000094 F04F 0502       MOV              R5,#0x2
+  187 00000098 2801            CMP              R0,#0x1     ; Check if R0 is 1
+  188 0000009A D025            BEQ              PortBWait_Init ; If yes, branch
+                                                             to PortBWait_Init
+  189 0000009C         
+  190 0000009C F04F 0501       MOV              R5,#0x1
+  191 000000A0 2802            CMP              R0,#0x2
+  192 000000A2 D021            BEQ              PortBWait_Init
+  193 000000A4         
+  194 000000A4 F04F 0500       LDR              R5,= 0x0
+  195 000000A8 4F9E            LDR              R7, = GPIOA_IDR ; Loads address
+                                                             of Port A input da
+                                                            ta register     
+  196 000000AA 6838            LDR              R0,[R7]
+  197 000000AC         
+  198 000000AC F04F 0420       LDR              R4,= 0x20   ; Loads required he
+                                                            x value for SW5 (Gr
+                                                            een)   
+  199 000000B0 EA00 0004       AND              R0,R4
+  200 000000B4 EA4F 1050       LSR              R0, #5      ; 0x20 -> 0x1
+  201 000000B8 F04F 0508       MOV              R5,#0x8
+  202 000000BC 2800            CMP              R0,#0x0     ; Check if R0 is 0
+  203 000000BE D027            BEQ              PortAWait_Init ; If yes, branch
+                                                             to PortAWait_Init 
+                                                            
+  204 000000C0         
+  205 000000C0 BC90            POP              {R7,R4}
+  206 000000C2         
+  207 000000C2 E7CA            B                DelayVal
+  208 000000C4         
+  209 000000C4         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;UC2;;;;;;;;;;;;;;;;;;;
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+                       ;;;;;;;;;;;;;;;;
+  210 000000C4         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;;;;
+  211 000000C4         ;;; This routine waits for signal from input port regist
+                       ers 
+  212 000000C4         ;;; Registers:
+  213 000000C4         ;;;  R7: Loads address of GPIOx_IDR
+  214 000000C4         ;;;  R4: Moves required hex values to enable GPIO 
+  215 000000C4         ;;;  R6: Initial react time 
+  216 000000C4         
+  217 000000C4         ;;; Wait for initial input from Port C
+  218 000000C4         PortCWait_Init
+  219 000000C4 F10B 0B01       ADD              R11,#0x1
+  220 000000C8 45B3            CMP              R11,R6
+  221 000000CA D033            BEQ              Exit_Init
+  222 000000CC         
+  223 000000CC 4F93            LDR              R7, = GPIOC_IDR
+  224 000000CE 6838            LDR              R0,[R7]
+  225 000000D0 F44F 5480       LDR              R4,= 0x1000
+  226 000000D4 EA00 0004       AND              R0,R4
+  227 000000D8 EA4F 3010       LSR              R0, #12
+  228 000000DC 2800            CMP              R0,#0x0
+  229 000000DE D000            BEQ              PortCReset_Init
+  230 000000E0 E7F0            B                PortCWait_Init
+  231 000000E2         
+  232 000000E2         PortCReset_Init
+  233 000000E2 F04F 0B00       MOV              R11,#0x0
+  234 000000E6 E7ED            B                PortCWait_Init
+  235 000000E8         
+  236 000000E8         ;;; Wait for initial input from Port B
+  237 000000E8         PortBWait_Init
+  238 000000E8 F10B 0B01       ADD              R11,#0x1
+  239 000000EC 45B3            CMP              R11,R6
+  240 000000EE D021            BEQ              Exit_Init
+  241 000000F0         
+  242 000000F0 4F8B            LDR              R7, = GPIOB_IDR
+  243 000000F2 6838            LDR              R0,[R7]
+  244 000000F4 F44F 7440       LDR              R4,= 0x300
+  245 000000F8 EA00 0004       AND              R0,R4
+  246 000000FC EA4F 2010       LSR              R0, #8
+  247 00000100 2801            CMP              R0,#0x1
+  248 00000102 D002            BEQ              PortBReset_Init
+  249 00000104 2802            CMP              R0,#0x2
+  250 00000106 D000            BEQ              PortBReset_Init
+  251 00000108 E7EE            B                PortBWait_Init
+  252 0000010A         
+  253 0000010A         PortBReset_Init
+  254 0000010A F04F 0B00       MOV              R11,#0x0
+  255 0000010E E7EB            B                PortBWait_Init
+  256 00000110         
+  257 00000110         ;;; Wait for initial input from Port A
+  258 00000110         PortAWait_Init
+  259 00000110 F10B 0B01       ADD              R11,#0x1
+  260 00000114 45B3            CMP              R11,R6
+  261 00000116 D00D            BEQ              Exit_Init
+  262 00000118         
+  263 00000118 4F82            LDR              R7, = GPIOA_IDR
+  264 0000011A 6838            LDR              R0,[R7]
+  265 0000011C F04F 0420       LDR              R4,= 0x20
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+  266 00000120 EA00 0004       AND              R0,R4
+  267 00000124 EA4F 1050       LSR              R0, #5
+  268 00000128 2800            CMP              R0,#0x0
+  269 0000012A D000            BEQ              PortAReset_Init
+  270 0000012C E7F0            B                PortAWait_Init
+  271 0000012E         
+  272 0000012E         PortAReset_Init
+  273 0000012E F04F 0B00       MOV              R11,#0x0
+  274 00000132 E7ED            B                PortAWait_Init
+  275 00000134         
+  276 00000134         Exit_Init
+  277 00000134 F04F 0200       MOV              R2,#0x0
+  278 00000138 EA4F 2242       LSL              R2, #9
+  279 0000013C EA6F 0202       MVN              R2,R2
+  280 00000140 F8DF 91D4       LDR              R9,=GPIOA_ODR
+  281 00000144 F8C9 2000       STR              R2,[R9]
+  282 00000148 F04F 0B00       MOV              R11,#0x0
+  283 0000014C         
+  284 0000014C         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;UC3;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;;;;
+  285 0000014C         ;;; Initial waiting time
+  286 0000014C         PrelimWait
+  287 0000014C F10B 0B01       ADD              R11,#0x1
+  288 00000150 45B3            CMP              R11,R6
+  289 00000152 D000            BEQ              RandomOnLED
+  290 00000154 E7FA            B                PrelimWait
+  291 00000156         
+  292 00000156         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;;;;
+  293 00000156         ;;; This routine lights up random LEDs
+  294 00000156         ;;; Registers: 
+  295 00000156         ;;;  R9: Loads address of GPIOA_ODR
+  296 00000156         RandomOnLED
+  297 00000156 F04F 0B00       MOV              R11,#0x0
+  298 0000015A F8DF 91BC       LDR              R9,=GPIOA_ODR
+  299 0000015E F00A 0A03       AND              R10,R10,#0x3
+  300 00000162 F04F 0201       MOV              R2,#0x1
+  301 00000166 FA02 F20A       LSL              R2, R10
+  302 0000016A F04F 0A00       MOV              R10,#0x0
+  303 0000016E EA4F 2242       LSL              R2,#9
+  304 00000172 EA6F 0202       MVN              R2,R2
+  305 00000176 F8C9 2000       STR              R2,[R9]
+  306 0000017A         
+  307 0000017A         ;;;;;;;;;;;;;;;;;;;;;;;;;;game play;;;;;;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;
+  308 0000017A         Delay
+  309 0000017A F10A 0A01       ADD              R10,#0x1
+  310 0000017E         
+  311 0000017E B490            PUSH             {R7,R4}
+  312 00000180 F04F 0500       LDR              R5,= 0x0
+  313 00000184 4F65            LDR              R7, = GPIOC_IDR
+  314 00000186 6838            LDR              R0,[R7]
+  315 00000188 F44F 5480       LDR              R4,= 0x1000
+  316 0000018C EA00 0004       AND              R0,R4
+  317 00000190 EA4F 3010       LSR              R0, #12
+  318 00000194 F04F 0504       MOV              R5,#0x4
+  319 00000198 2800            CMP              R0,#0x0
+  320 0000019A D023            BEQ              PortCWait
+  321 0000019C         
+
+
+
+ARM Macro Assembler    Page 9 
+
+
+  322 0000019C F04F 0500       LDR              R5,= 0x0
+  323 000001A0 4F5F            LDR              R7, = GPIOB_IDR
+  324 000001A2 6838            LDR              R0,[R7]
+  325 000001A4 F44F 7440       LDR              R4,= 0x300
+  326 000001A8 EA00 0004       AND              R0,R4
+  327 000001AC EA4F 2010       LSR              R0, #8
+  328 000001B0 F04F 0502       MOV              R5,#0x2
+  329 000001B4 2801            CMP              R0,#0x1
+  330 000001B6 D027            BEQ              PortBWait
+  331 000001B8 F04F 0501       MOV              R5,#0x1
+  332 000001BC 2802            CMP              R0,#0x2
+  333 000001BE D023            BEQ              PortBWait
+  334 000001C0         
+  335 000001C0 F04F 0500       LDR              R5,= 0x0
+  336 000001C4 4F57            LDR              R7, = GPIOA_IDR
+  337 000001C6 6838            LDR              R0,[R7]
+  338 000001C8 F04F 0420       LDR              R4,= 0x20
+  339 000001CC EA00 0004       AND              R0,R4
+  340 000001D0 EA4F 1050       LSR              R0, #5
+  341 000001D4 F04F 0508       MOV              R5,#0x8
+  342 000001D8 2800            CMP              R0,#0x0
+  343 000001DA D029            BEQ              PortAWait
+  344 000001DC         
+  345 000001DC BC90            POP              {R7,R4}
+  346 000001DE         
+  347 000001DE         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;
+  348 000001DE 45C2            CMP              R10,R8
+  349 000001E0 D058            BEQ              LosingSignalTime ; branch to fa
+                                                            il mode when react 
+                                                            time is elapsed
+  350 000001E2 E7CA            B                Delay
+  351 000001E4         
+  352 000001E4         ;;; Wait for input from Port C
+  353 000001E4         PortCWait
+  354 000001E4 F10B 0B01       ADD              R11,#0x1
+  355 000001E8 45B3            CMP              R11,R6
+  356 000001EA D033            BEQ              SWInput
+  357 000001EC         
+  358 000001EC 4F4B            LDR              R7, = GPIOC_IDR
+  359 000001EE 6838            LDR              R0,[R7]
+  360 000001F0 F44F 5480       LDR              R4,= 0x1000
+  361 000001F4 EA00 0004       AND              R0,R4
+  362 000001F8 EA4F 3010       LSR              R0, #12
+  363 000001FC 2800            CMP              R0,#0x0
+  364 000001FE D000            BEQ              PortCReset
+  365 00000200 E7F0            B                PortCWait
+  366 00000202         
+  367 00000202         PortCReset
+  368 00000202 F04F 0B00       MOV              R11,#0x0
+  369 00000206 E7ED            B                PortCWait
+  370 00000208         
+  371 00000208         ;;; Wait for input from Port B
+  372 00000208         PortBWait
+  373 00000208 F10B 0B01       ADD              R11,#0x1
+  374 0000020C 45B3            CMP              R11,R6
+  375 0000020E D021            BEQ              SWInput
+  376 00000210         
+  377 00000210 4F43            LDR              R7, = GPIOB_IDR
+
+
+
+ARM Macro Assembler    Page 10 
+
+
+  378 00000212 6838            LDR              R0,[R7]
+  379 00000214 F44F 7440       LDR              R4,= 0x300
+  380 00000218 EA00 0004       AND              R0,R4
+  381 0000021C EA4F 2010       LSR              R0, #8
+  382 00000220 2801            CMP              R0,#0x1
+  383 00000222 D002            BEQ              PortBReset
+  384 00000224 2802            CMP              R0,#0x2
+  385 00000226 D000            BEQ              PortBReset
+  386 00000228 E7EE            B                PortBWait
+  387 0000022A         
+  388 0000022A         PortBReset
+  389 0000022A F04F 0B00       MOV              R11,#0x0
+  390 0000022E E7EB            B                PortBWait
+  391 00000230         
+  392 00000230         ;;; Wait for input from Port A
+  393 00000230         PortAWait
+  394 00000230 F10B 0B01       ADD              R11,#0x1
+  395 00000234 45B3            CMP              R11,R6
+  396 00000236 D00D            BEQ              SWInput
+  397 00000238         
+  398 00000238 4F3A            LDR              R7, = GPIOA_IDR
+  399 0000023A 6838            LDR              R0,[R7]
+  400 0000023C F04F 0420       LDR              R4,= 0x20
+  401 00000240 EA00 0004       AND              R0,R4
+  402 00000244 EA4F 1050       LSR              R0, #5
+  403 00000248 2800            CMP              R0,#0x0
+  404 0000024A D000            BEQ              PortAReset
+  405 0000024C E7F0            B                PortAWait
+  406 0000024E         
+  407 0000024E         PortAReset
+  408 0000024E F04F 0B00       MOV              R11,#0x0
+  409 00000252 E7ED            B                PortAWait
+  410 00000254         
+  411 00000254         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;;;;
+  412 00000254         ;;; This routine checks if player pressed the correct sw
+                       itch
+  413 00000254         ;;; Registers:
+  414 00000254         ;;;  R5: If R5 is equal to R2, branch to numCycles_count
+                       
+  415 00000254         SWInput
+  416 00000254 EA4F 2545       LSL              R5, #9
+  417 00000258 EA6F 0505       MVN              R5, R5
+  418 0000025C 4295            CMP              R5, R2
+  419 0000025E D02F            BEQ              numCycles_count
+  420 00000260 4295            CMP              R5, R2
+  421 00000262 D117            BNE              LosingSignalTime
+  422 00000264         
+  423 00000264         NextRandomOnLED
+  424 00000264 F04F 020F       MOV              R2,#0xF
+  425 00000268 EA4F 2242       LSL              R2, #9
+  426 0000026C EA6F 0202       MVN              R2,R2
+  427 00000270 F8DF 90A4       LDR              R9,=GPIOA_ODR
+  428 00000274 F8C9 2000       STR              R2,[R9]
+  429 00000278 F04F 0B00       MOV              R11,#0x0
+  430 0000027C         
+  431 0000027C         WaitEnd
+  432 0000027C F10B 0B01       ADD              R11,#0x1
+  433 00000280 45C3            CMP              R11, R8
+
+
+
+ARM Macro Assembler    Page 11 
+
+
+  434 00000282 F43F AF68       BEQ              RandomOnLED
+  435 00000286 E7F9            B                WaitEnd
+  436 00000288         
+  437 00000288         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  438 00000288         ;;; For WinningSignalTime:
+  439 00000288         ;;;  This routine causes the LEDs to flash, then LED1 & 
+                       3 are ON, LED 2 & 4 are OFF and vice versa
+  440 00000288         ;;;  1010->0101
+  441 00000288         ;;; For LosingSignalTime:
+  442 00000288         ;;;  This routine causes the LEDs to flash, then LED1 & 
+                       4 are ON, LED 2 & 3 are OFF and vice versa
+  443 00000288         ;;;  1001->0110
+  444 00000288         ;;; EOR in WinLoseSignalLoop flips 1s to 0s and vice ver
+                       sa
+  445 00000288         WinningSignalTime
+  446 00000288 F44F 6220       MOV              R2,#0xA00
+  447 0000028C F04F 0A00       MOV              R10,#0x0
+  448 00000290 4292            CMP              R2, R2
+  449 00000292 D003            BEQ              WinLoseSignalLoop
+  450 00000294         
+  451 00000294         LosingSignalTime
+  452 00000294 F44F 6240       MOV              R2,#0xC00
+  453 00000298 F04F 0A00       MOV              R10,#0x0
+  454 0000029C         
+  455 0000029C         WinLoseSignalLoop
+  456 0000029C F1BA 0F0F       CMP              R10, #0xF
+  457 000002A0 D016            BEQ              EndSuccess
+  458 000002A2 F8DF 9074       LDR              R9,=GPIOA_ODR
+  459 000002A6 F482 52F0       EOR              R2,R2,#0x1E00
+  460 000002AA F8C9 2000       STR              R2,[R9]
+  461 000002AE F10A 0A01       ADD              R10,#0x1
+  462 000002B2 F04F 0B00       MOV              R11,#0x0
+  463 000002B6         
+  464 000002B6         WaitLoop
+  465 000002B6 F10B 0B01       ADD              R11,#0x1
+  466 000002BA 45C3            CMP              R11, R8
+  467 000002BC D0EE            BEQ              WinLoseSignalLoop
+  468 000002BE E7FA            B                WaitLoop
+  469 000002C0         
+  470 000002C0         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                       ;;;;;;;;;;;;;;;;;;;;;;;;
+  471 000002C0         ;;; This routine counts the result 
+  472 000002C0         ;;; Registers:
+  473 000002C0         ;;;  R3: Counts result and increases by 1 if SW is corre
+                       ct.
+  474 000002C0         ;;;      Goes to win mode when result is 15
+  475 000002C0         ;;;  R6: React time, it reduces on correct hits
+  476 000002C0         numCycles_count
+  477 000002C0 F103 0301       ADD              R3,#0x1
+  478 000002C4 F6A8 78FF       SUB              R8,R8,#0xFFF
+  479 000002C8 2B0F            CMP              R3,#0xF
+  480 000002CA D0DD            BEQ              WinningSignalTime
+  481 000002CC 429B            CMP              R3, R3
+  482 000002CE D0C9            BEQ              NextRandomOnLED
+  483 000002D0         
+  484 000002D0         EndSuccess
+  485 000002D0 4770            BX               LR
+  486 000002D2                 ENDP
+
+
+
+ARM Macro Assembler    Page 12 
+
+
+  487 000002D2         
+  488 000002D2 00 00           ALIGN
+  489 000002D4         
+  490 000002D4         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  491 000002D4         numCycles
+                               PROC
+  492 000002D4 F003 030F       AND              R3,R3,#0xF
+  493 000002D8 EA4F 2343       LSL              R3, #9
+  494 000002DC EA6F 0303       MVN              R3, R3
+  495 000002E0 F8DF 9034       LDR              R9,=GPIOA_ODR
+  496 000002E4 F8C9 3000       STR              R3,[R9]
+  497 000002E8 F04F 0A00       MOV              R10,#0x0
+  498 000002EC         
+  499 000002EC         numCycles_loop
+  500 000002EC F1BA 0F0F       CMP              R10, #0xF
+  501 000002F0 D008            BEQ              gameOver
+  502 000002F2 F10A 0A01       ADD              R10,#0x1
+  503 000002F6 F04F 0B00       MOV              R11,#0x0
+  504 000002FA         
+  505 000002FA         numCycles_wait
+  506 000002FA F10B 0B01       ADD              R11,#0x1
+  507 000002FE 45C3            CMP              R11, R8
+  508 00000300 D0F4            BEQ              numCycles_loop
+  509 00000302 E7FA            B                numCycles_wait
+  510 00000304         
+  511 00000304         gameOver
+  512 00000304 4770            BX               LR
+  513 00000306                 ENDP
+  514 00000306         
+  515 00000306 00 00           ALIGN
+  516 00000308                 END
+              40021018 
+              40010804 
+              44433334 
+              0007A120 
+              4001080C 
+              40011008 
+              40010C08 
+              40010808 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\objects\ufuoma_aya_ense_352_project.d -o.\objects\ufuoma_aya_ens
+e_352_project.o -I.\RTE\_Target_1 -IC:\Users\louis\AppData\Local\Arm\Packs\Keil
+\STM32F1xx_DFP\2.3.0\Device\Include -IC:\Keil_v5\ARM\CMSIS\Include --predefine=
+"__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 528" --predefine="STM32F10X
+_MD_VL SETA 1" --list=.\listings\ufuoma_aya_ense_352_project.lst Ufuoma_Aya_ENS
+E_352_Project.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 73 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 76 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 74 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Delay 0000017A
+
+Symbol: Delay
+   Definitions
+      At line 308 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 350 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: Delay used once
+DelayVal 0000005A
+
+Symbol: DelayVal
+   Definitions
+      At line 162 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 207 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: DelayVal used once
+EndSuccess 000002D0
+
+Symbol: EndSuccess
+   Definitions
+      At line 484 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 457 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: EndSuccess used once
+Exit_Init 00000134
+
+Symbol: Exit_Init
+   Definitions
+      At line 276 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 221 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 240 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 261 in file Ufuoma_Aya_ENSE_352_Project.s
+
+GPIO_ClockInit 00000014
+
+Symbol: GPIO_ClockInit
+   Definitions
+      At line 104 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 84 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: GPIO_ClockInit used once
+GPIO_Init 00000024
+
+Symbol: GPIO_Init
+   Definitions
+      At line 127 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 85 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: GPIO_Init used once
+LosingSignalTime 00000294
+
+Symbol: LosingSignalTime
+   Definitions
+      At line 451 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 349 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 421 in file Ufuoma_Aya_ENSE_352_Project.s
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+MYCODE 00000000
+
+Symbol: MYCODE
+   Definitions
+      At line 79 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: MYCODE unused
+MainLoop 00000008
+
+Symbol: MainLoop
+   Definitions
+      At line 87 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 90 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: MainLoop used once
+NextRandomOnLED 00000264
+
+Symbol: NextRandomOnLED
+   Definitions
+      At line 423 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 482 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: NextRandomOnLED used once
+PortAReset 0000024E
+
+Symbol: PortAReset
+   Definitions
+      At line 407 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 404 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: PortAReset used once
+PortAReset_Init 0000012E
+
+Symbol: PortAReset_Init
+   Definitions
+      At line 272 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 269 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: PortAReset_Init used once
+PortAWait 00000230
+
+Symbol: PortAWait
+   Definitions
+      At line 393 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 343 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 405 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 409 in file Ufuoma_Aya_ENSE_352_Project.s
+
+PortAWait_Init 00000110
+
+Symbol: PortAWait_Init
+   Definitions
+      At line 258 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 203 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 270 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 274 in file Ufuoma_Aya_ENSE_352_Project.s
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+
+PortBReset 0000022A
+
+Symbol: PortBReset
+   Definitions
+      At line 388 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 383 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 385 in file Ufuoma_Aya_ENSE_352_Project.s
+
+PortBReset_Init 0000010A
+
+Symbol: PortBReset_Init
+   Definitions
+      At line 253 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 248 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 250 in file Ufuoma_Aya_ENSE_352_Project.s
+
+PortBWait 00000208
+
+Symbol: PortBWait
+   Definitions
+      At line 372 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 330 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 333 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 386 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 390 in file Ufuoma_Aya_ENSE_352_Project.s
+
+PortBWait_Init 000000E8
+
+Symbol: PortBWait_Init
+   Definitions
+      At line 237 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 188 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 192 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 251 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 255 in file Ufuoma_Aya_ENSE_352_Project.s
+
+PortCReset 00000202
+
+Symbol: PortCReset
+   Definitions
+      At line 367 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 364 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: PortCReset used once
+PortCReset_Init 000000E2
+
+Symbol: PortCReset_Init
+   Definitions
+      At line 232 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 229 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: PortCReset_Init used once
+PortCWait 000001E4
+
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: PortCWait
+   Definitions
+      At line 353 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 320 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 365 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 369 in file Ufuoma_Aya_ENSE_352_Project.s
+
+PortCWait_Init 000000C4
+
+Symbol: PortCWait_Init
+   Definitions
+      At line 218 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 177 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 230 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 234 in file Ufuoma_Aya_ENSE_352_Project.s
+
+PrelimWait 0000014C
+
+Symbol: PrelimWait
+   Definitions
+      At line 286 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 290 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: PrelimWait used once
+RandomOnLED 00000156
+
+Symbol: RandomOnLED
+   Definitions
+      At line 296 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 289 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 434 in file Ufuoma_Aya_ENSE_352_Project.s
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 83 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 77 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 80 in file Ufuoma_Aya_ENSE_352_Project.s
+
+SWInput 00000254
+
+Symbol: SWInput
+   Definitions
+      At line 415 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 356 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 375 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 396 in file Ufuoma_Aya_ENSE_352_Project.s
+
+TurnOnLED 00000046
+
+Symbol: TurnOnLED
+   Definitions
+      At line 148 in file Ufuoma_Aya_ENSE_352_Project.s
+
+
+
+ARM Macro Assembler    Page 5 Alphabetic symbol ordering
+Relocatable symbols
+
+   Uses
+      At line 164 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: TurnOnLED used once
+WaitEnd 0000027C
+
+Symbol: WaitEnd
+   Definitions
+      At line 431 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 435 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: WaitEnd used once
+WaitLoop 000002B6
+
+Symbol: WaitLoop
+   Definitions
+      At line 464 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 468 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: WaitLoop used once
+WinLoseSignalLoop 0000029C
+
+Symbol: WinLoseSignalLoop
+   Definitions
+      At line 455 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 449 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 467 in file Ufuoma_Aya_ENSE_352_Project.s
+
+WinningSignalTime 00000288
+
+Symbol: WinningSignalTime
+   Definitions
+      At line 445 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 480 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: WinningSignalTime used once
+gameOver 00000304
+
+Symbol: gameOver
+   Definitions
+      At line 511 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 501 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: gameOver used once
+numCycles 000002D4
+
+Symbol: numCycles
+   Definitions
+      At line 491 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 89 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: numCycles used once
+numCycles_count 000002C0
+
+Symbol: numCycles_count
+   Definitions
+      At line 476 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 419 in file Ufuoma_Aya_ENSE_352_Project.s
+
+
+
+ARM Macro Assembler    Page 6 Alphabetic symbol ordering
+Relocatable symbols
+
+Comment: numCycles_count used once
+numCycles_loop 000002EC
+
+Symbol: numCycles_loop
+   Definitions
+      At line 499 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 508 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: numCycles_loop used once
+numCycles_wait 000002FA
+
+Symbol: numCycles_wait
+   Definitions
+      At line 505 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 509 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: numCycles_wait used once
+ready_mode 00000038
+
+Symbol: ready_mode
+   Definitions
+      At line 141 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 88 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: ready_mode used once
+37 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+ADC_CR1 00000000
+
+Symbol: ADC_CR1
+   Definitions
+      At line 64 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: ADC_CR1 unused
+ADC_CR2 00000000
+
+Symbol: ADC_CR2
+   Definitions
+      At line 65 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: ADC_CR2 unused
+DelayTIME 00186A00
+
+Symbol: DelayTIME
+   Definitions
+      At line 69 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: DelayTIME unused
+GPIOA_BRR 40010814
+
+Symbol: GPIOA_BRR
+   Definitions
+      At line 26 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOA_BRR unused
+GPIOA_BSRR 40010810
+
+Symbol: GPIOA_BSRR
+   Definitions
+      At line 25 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOA_BSRR unused
+GPIOA_CRH 40010804
+
+Symbol: GPIOA_CRH
+   Definitions
+      At line 22 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 129 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: GPIOA_CRH used once
+GPIOA_CRL 40010800
+
+Symbol: GPIOA_CRL
+   Definitions
+      At line 21 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOA_CRL unused
+GPIOA_IDR 40010808
+
+Symbol: GPIOA_IDR
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+   Definitions
+      At line 23 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 195 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 263 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 336 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 398 in file Ufuoma_Aya_ENSE_352_Project.s
+
+GPIOA_LCKR 40010818
+
+Symbol: GPIOA_LCKR
+   Definitions
+      At line 27 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOA_LCKR unused
+GPIOA_ODR 4001080C
+
+Symbol: GPIOA_ODR
+   Definitions
+      At line 24 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 149 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 280 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 298 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 427 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 458 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 495 in file Ufuoma_Aya_ENSE_352_Project.s
+
+GPIOB_BRR 40010C14
+
+Symbol: GPIOB_BRR
+   Definitions
+      At line 35 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOB_BRR unused
+GPIOB_BSRR 40010C10
+
+Symbol: GPIOB_BSRR
+   Definitions
+      At line 34 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOB_BSRR unused
+GPIOB_CRH 40010C04
+
+Symbol: GPIOB_CRH
+   Definitions
+      At line 31 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOB_CRH unused
+GPIOB_CRL 40010C00
+
+Symbol: GPIOB_CRL
+   Definitions
+      At line 30 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Absolute symbols
+
+      None
+Comment: GPIOB_CRL unused
+GPIOB_IDR 40010C08
+
+Symbol: GPIOB_IDR
+   Definitions
+      At line 32 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 180 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 242 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 323 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 377 in file Ufuoma_Aya_ENSE_352_Project.s
+
+GPIOB_LCKR 40010C18
+
+Symbol: GPIOB_LCKR
+   Definitions
+      At line 36 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOB_LCKR unused
+GPIOB_ODR 40010C0C
+
+Symbol: GPIOB_ODR
+   Definitions
+      At line 33 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOB_ODR unused
+GPIOC_BRR 40011014
+
+Symbol: GPIOC_BRR
+   Definitions
+      At line 45 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOC_BRR unused
+GPIOC_BSRR 40011010
+
+Symbol: GPIOC_BSRR
+   Definitions
+      At line 44 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOC_BSRR unused
+GPIOC_CRH 40011004
+
+Symbol: GPIOC_CRH
+   Definitions
+      At line 41 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOC_CRH unused
+GPIOC_CRL 40011000
+
+Symbol: GPIOC_CRL
+   Definitions
+      At line 40 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+Absolute symbols
+
+      None
+Comment: GPIOC_CRL unused
+GPIOC_IDR 40011008
+
+Symbol: GPIOC_IDR
+   Definitions
+      At line 42 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 169 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 223 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 313 in file Ufuoma_Aya_ENSE_352_Project.s
+      At line 358 in file Ufuoma_Aya_ENSE_352_Project.s
+
+GPIOC_LCKR 40011018
+
+Symbol: GPIOC_LCKR
+   Definitions
+      At line 46 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOC_LCKR unused
+GPIOC_ODR 4001100C
+
+Symbol: GPIOC_ODR
+   Definitions
+      At line 43 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: GPIOC_ODR unused
+INITIAL_MSP 20001000
+
+Symbol: INITIAL_MSP
+   Definitions
+      At line 17 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 76 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: INITIAL_MSP used once
+RCC_AHBENR 40021014
+
+Symbol: RCC_AHBENR
+   Definitions
+      At line 55 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RCC_AHBENR unused
+RCC_APB1ENR 4002101C
+
+Symbol: RCC_APB1ENR
+   Definitions
+      At line 59 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RCC_APB1ENR unused
+RCC_APB1RSTR 40021010
+
+Symbol: RCC_APB1RSTR
+   Definitions
+      At line 54 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 5 Alphabetic symbol ordering
+Absolute symbols
+
+      None
+Comment: RCC_APB1RSTR unused
+RCC_APB2ENR 40021018
+
+Symbol: RCC_APB2ENR
+   Definitions
+      At line 57 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      At line 107 in file Ufuoma_Aya_ENSE_352_Project.s
+Comment: RCC_APB2ENR used once
+RCC_APB2RSTR 4002100C
+
+Symbol: RCC_APB2RSTR
+   Definitions
+      At line 53 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RCC_APB2RSTR unused
+RCC_BDCR 40021020
+
+Symbol: RCC_BDCR
+   Definitions
+      At line 60 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RCC_BDCR unused
+RCC_CFGR 40021004
+
+Symbol: RCC_CFGR
+   Definitions
+      At line 51 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RCC_CFGR unused
+RCC_CFGR2 4002102C
+
+Symbol: RCC_CFGR2
+   Definitions
+      At line 62 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RCC_CFGR2 unused
+RCC_CIR 40021008
+
+Symbol: RCC_CIR
+   Definitions
+      At line 52 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RCC_CIR unused
+RCC_CR 40021000
+
+Symbol: RCC_CR
+   Definitions
+      At line 50 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RCC_CR unused
+RCC_CSR 40021024
+
+
+
+ARM Macro Assembler    Page 6 Alphabetic symbol ordering
+Absolute symbols
+
+
+Symbol: RCC_CSR
+   Definitions
+      At line 61 in file Ufuoma_Aya_ENSE_352_Project.s
+   Uses
+      None
+Comment: RCC_CSR unused
+36 symbols
+410 symbols in table
