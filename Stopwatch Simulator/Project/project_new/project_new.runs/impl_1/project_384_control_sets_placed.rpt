@@ -1,0 +1,82 @@
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
+| Date         : Wed Nov 28 17:02:22 2018
+| Host         : ED434-ST07 running 64-bit Service Pack 1  (build 7601)
+| Command      : report_control_sets -verbose -file project_384_control_sets_placed.rpt
+| Design       : project_384
+| Device       : xc7a100t
+----------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Flip-Flop Distribution
+3. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Number of unique control sets                            |    18 |
+| Unused register locations in slices containing registers |    39 |
++----------------------------------------------------------+-------+
+
+
+2. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              22 |           11 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |              67 |           20 |
+| Yes          | No                    | No                     |             128 |           56 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |             576 |          182 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+3. Detailed Control Set Information
+-----------------------------------
+
++------------------+-------------------------------+-------------------------------+------------------+----------------+
+|   Clock Signal   |         Enable Signal         |        Set/Reset Signal       | Slice Load Count | Bel Load Count |
++------------------+-------------------------------+-------------------------------+------------------+----------------+
+|  part0/sig_reset |                               | part1/digit[1]                |                1 |              1 |
+|  part0/sig_reset |                               | part1/anode[3]_i_1_n_0        |                1 |              1 |
+|  part0/sig_reset |                               | part1/digit[0]                |                2 |              3 |
+|  CLK_IBUF_BUFG   |                               |                               |                2 |              4 |
+|  part0/sig_reset |                               |                               |                6 |              9 |
+|  sig_num1_BUFG   |                               |                               |                3 |              9 |
+|  CLK_IBUF_BUFG   |                               | part0/temp_2                  |                8 |             31 |
+|  CLK_IBUF_BUFG   |                               | part0/temp_1                  |                8 |             31 |
+|  sig_num1_BUFG   | part1/count_num2[31]_i_2_n_0  | part1/count_num2[31]_i_1_n_0  |                9 |             32 |
+|  sig_num1_BUFG   | part1/count_num3[31]_i_2_n_0  | part1/count_num3[31]_i_1_n_0  |                9 |             32 |
+|  sig_num1_BUFG   | part1/count_num4[31]_i_2_n_0  | part1/count_num4[31]_i_1_n_0  |                8 |             32 |
+|  sig_num1_BUFG   | part1/enable                  | part1/count_num1              |                8 |             32 |
+|  sig_num1_BUFG   | part1/lap_count[31]_i_2_n_0   | part1/count_num1              |                7 |             32 |
+|  sig_num1_BUFG   | part1/lap_display[31]_i_2_n_0 | part1/lap_display[31]_i_1_n_0 |                8 |             32 |
+|  sig_num1_BUFG   | part1/lap_num4a               | part1/lap_num3a[31]_i_1_n_0   |               34 |            128 |
+|  sig_num1_BUFG   | part1/lap_num4b               | part1/lap_num3b[31]_i_1_n_0   |               66 |            128 |
+|  sig_num1_BUFG   | part1/lap_num3[31]_i_2_n_0    | part1/lap_num3[31]_i_1_n_0    |               33 |            128 |
+|  sig_num1_BUFG   | part1/disp_4                  |                               |               56 |            128 |
++------------------+-------------------------------+-------------------------------+------------------+----------------+
+
+
++--------+-----------------------+
+| Fanout | Number of ControlSets |
++--------+-----------------------+
+| 1      |                     2 |
+| 3      |                     1 |
+| 4      |                     1 |
+| 9      |                     2 |
+| 16+    |                    12 |
++--------+-----------------------+
+
+

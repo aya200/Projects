@@ -1,0 +1,21 @@
+#-----------------------------------------------------------
+# Vivado v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Mon Nov 26 17:33:00 2018
+# Process ID: 2768
+# Current directory: H:/ENEL 384/new384proj
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent9120 H:\ENEL 384\new384proj\new384proj.xpr
+# Log file: H:/ENEL 384/new384proj/vivado.log
+# Journal file: H:/ENEL 384/new384proj\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {H:/ENEL 384/new384proj/new384proj.xpr}
+INFO: [Project 1-313] Project file moved from 'H:/enel384/new384proj' since last save.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2016.3/data/ip'.
+exit
+INFO: [Common 17-206] Exiting Vivado at Mon Nov 26 17:37:55 2018...

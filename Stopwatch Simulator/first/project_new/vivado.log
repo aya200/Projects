@@ -1,0 +1,22 @@
+#-----------------------------------------------------------
+# Vivado v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Wed Nov 28 18:15:56 2018
+# Process ID: 4720
+# Current directory: H:/ENEL 384/first/project_new
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent5112 H:\ENEL 384\first\project_new\project_new.xpr
+# Log file: H:/ENEL 384/first/project_new/vivado.log
+# Journal file: H:/ENEL 384/first/project_new\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {H:/ENEL 384/first/project_new/project_new.xpr}
+INFO: [Project 1-313] Project file moved from 'H:/ENEL 384/Project/project_new' since last save.
+Scanning sources...
+Finished scanning sources
+WARNING: [filemgmt 56-2] IP Output Repository Path: Could not find the directory 'H:/ENEL 384/first/project_new/project_new.cache/ip', nor could it be found using path 'H:/ENEL 384/Project/project_new/project_new.cache/ip'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2016.3/data/ip'.
+exit
+INFO: [Common 17-206] Exiting Vivado at Wed Nov 28 18:16:29 2018...

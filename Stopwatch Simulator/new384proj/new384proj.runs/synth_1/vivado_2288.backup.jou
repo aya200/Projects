@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Sat Nov 18 16:37:24 2017
+# Process ID: 2288
+# Current directory: I:/enel384/new384proj/new384proj.runs/synth_1
+# Command line: vivado.exe -log traffic.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source traffic.tcl
+# Log file: I:/enel384/new384proj/new384proj.runs/synth_1/traffic.vds
+# Journal file: I:/enel384/new384proj/new384proj.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source traffic.tcl -notrace
