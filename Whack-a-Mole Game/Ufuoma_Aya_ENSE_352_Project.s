@@ -1,8 +1,5 @@
 ; Ufuoma Aya
-; 200327306
-; ENSE 352 Project
-
-
+; Whack-a-Mole Game
 
 ; GPIO Test program - Dave Duguid, 2011
 ; Modified Trevor Douglas 2014
@@ -11,7 +8,6 @@
             PRESERVE8
             THUMB       
 
-        		 
 ;;; Equates
 
 INITIAL_MSP	EQU		0x20001000	; Initial Main Stack Pointer Value
