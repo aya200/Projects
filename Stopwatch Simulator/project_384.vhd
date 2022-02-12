@@ -71,7 +71,7 @@ begin
     end if;
 end process;
 
-disp_refresh <= temp_1; --240 Hz 
+disp_refresh <= temp_1; --250 Hz 
 timer <= temp_2; --100 Hz 
 
 process (disp_refresh, timer, push_button, enable) is
